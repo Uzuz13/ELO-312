@@ -20,12 +20,11 @@
 #include "main.h"
 #include "adc.h"
 #include "tim.h"
-#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "callbacks.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -46,8 +45,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-extern enum estado estado_boton;
-extern int switches[2];
+extern enum estado estado_boton ;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -89,7 +87,6 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_USART2_UART_Init();
   MX_ADC1_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
@@ -133,7 +130,22 @@ int main(void)
 	HAL_Delay(arreglo[numero_arreglo]);
 	*/
 	// TASK 4
-	 int arreglo_leds[8]={1,1,1,1,0,0,0,0};
+	  static int arreglo_leds[8]={1,1,1,1,0,0,0,0};
+	  int largo=8;
+	  int temp=arreglo_leds[0];
+	  int switches_1;
+	  int switches_2;
+	  /*
+	  for(int j=0 ; j<3;j++){
+		  temp=arreglo_leds[0]
+		  for(int i=0;i<largo;i++)
+			{
+				arreglo_leds[i]=arreglo_leds[i+1];
+			};
+		  arreglo_leds[largo-1]=temp;
+	  }
+	  */
+	  /*
 	 HAL_GPIO_WritePin(L1_GPIO_Port, L1_Pin, arreglo_leds[0]);
 	 HAL_GPIO_WritePin(L2_GPIO_Port, L2_Pin, arreglo_leds[1]);
 	 HAL_GPIO_WritePin(L3_GPIO_Port, L3_Pin, arreglo_leds[2]);
@@ -142,50 +154,70 @@ int main(void)
 	 HAL_GPIO_WritePin(L6_GPIO_Port, L6_Pin, arreglo_leds[5]);
 	 HAL_GPIO_WritePin(L7_GPIO_Port, L7_Pin, arreglo_leds[6]);
 	 HAL_GPIO_WritePin(L8_GPIO_Port, L8_Pin, arreglo_leds[7]);
+	*/
+	 while(estado_boton==0){
+		 	 switches_1=HAL_GPIO_ReadPin(S1_GPIO_Port, S1_Pin);
+		 	 switches_2=HAL_GPIO_ReadPin(S2_GPIO_Port, S2_Pin);
+		 	 if (switches_1==0 && switches_2==0)
+		 	 	 {
 
-	 while(estado_boton==Play){
-		 	 if (switches[0]==0 && switches[1]==0){
-
-		 		 arreglo_leds=arreglo_leds !& 1;
+		 		   temp=arreglo_leds[0];
+		 		   for(int i=0;i<largo;i++)
+		 			{
+		 				arreglo_leds[i]=arreglo_leds[i+1];
+		 			};
+		 			  arreglo_leds[largo-1]=temp;
+		 		 HAL_GPIO_WritePin(L1_GPIO_Port, L1_Pin, arreglo_leds[0]);
+		 		 HAL_GPIO_WritePin(L2_GPIO_Port, L2_Pin, arreglo_leds[1]);
+		 		 HAL_GPIO_WritePin(L3_GPIO_Port, L3_Pin, arreglo_leds[2]);
+		 		 HAL_GPIO_WritePin(L4_GPIO_Port, L4_Pin, arreglo_leds[3]);
+		 		 HAL_GPIO_WritePin(L5_GPIO_Port, L5_Pin, arreglo_leds[4]);
+		 		 HAL_GPIO_WritePin(L6_GPIO_Port, L6_Pin, arreglo_leds[5]);
+		 		 HAL_GPIO_WritePin(L7_GPIO_Port, L7_Pin, arreglo_leds[6]);
+		 		 HAL_GPIO_WritePin(L8_GPIO_Port, L8_Pin, arreglo_leds[7]);
+		 		 HAL_Delay(500);
+		 	 	 }
+		 	if (switches_1==0 && switches_2==1)
+		 		{
+		 		temp=arreglo_leds[largo-1];
+		 		for(int i=largo-1;i>0;i--)
+		 		{
+		 			arreglo_leds[i]=arreglo_leds[i-1];
+		 		};
+		 		  arreglo_leds[0]=temp;
 		 		HAL_GPIO_WritePin(L1_GPIO_Port, L1_Pin, arreglo_leds[0]);
-		 			 HAL_GPIO_WritePin(L2_GPIO_Port, L2_Pin, arreglo_leds[1]);
-		 			 HAL_GPIO_WritePin(L3_GPIO_Port, L3_Pin, arreglo_leds[2]);
-		 			 HAL_GPIO_WritePin(L4_GPIO_Port, L4_Pin, arreglo_leds[3]);
-		 			 HAL_GPIO_WritePin(L5_GPIO_Port, L5_Pin, arreglo_leds[4]);
-		 			 HAL_GPIO_WritePin(L6_GPIO_Port, L6_Pin, arreglo_leds[5]);
-		 			 HAL_GPIO_WritePin(L7_GPIO_Port, L7_Pin, arreglo_leds[6]);
-		 			 HAL_GPIO_WritePin(L8_GPIO_Port, L8_Pin, arreglo_leds[7]);
-		 	 }
-		 	if (switches[0]==0 && switches[1]==1){
+		 		HAL_GPIO_WritePin(L2_GPIO_Port, L2_Pin, arreglo_leds[1]);
+		 		HAL_GPIO_WritePin(L3_GPIO_Port, L3_Pin, arreglo_leds[2]);
+		 		HAL_GPIO_WritePin(L4_GPIO_Port, L4_Pin, arreglo_leds[3]);
+		 		HAL_GPIO_WritePin(L5_GPIO_Port, L5_Pin, arreglo_leds[4]);
+		 		HAL_GPIO_WritePin(L6_GPIO_Port, L6_Pin, arreglo_leds[5]);
+		 		HAL_GPIO_WritePin(L7_GPIO_Port, L7_Pin, arreglo_leds[6]);
+		 		HAL_GPIO_WritePin(L8_GPIO_Port, L8_Pin, arreglo_leds[7]);
+		 		HAL_Delay(500);
+		 		}
+		 	if (switches_1==1 && switches_2==0)
+				{
+		 		for(int i=0;i<largo;i++)
+		 		{
+		 		  arreglo_leds[i]=arreglo_leds[i]^1 ;
+		 		};
+					HAL_GPIO_WritePin(L1_GPIO_Port, L1_Pin, arreglo_leds[0]);
+					HAL_GPIO_WritePin(L2_GPIO_Port, L2_Pin, arreglo_leds[1]);
+					HAL_GPIO_WritePin(L3_GPIO_Port, L3_Pin, arreglo_leds[2]);
+					HAL_GPIO_WritePin(L4_GPIO_Port, L4_Pin, arreglo_leds[3]);
+					HAL_GPIO_WritePin(L5_GPIO_Port, L5_Pin, arreglo_leds[4]);
+					HAL_GPIO_WritePin(L6_GPIO_Port, L6_Pin, arreglo_leds[5]);
+					HAL_GPIO_WritePin(L7_GPIO_Port, L7_Pin, arreglo_leds[6]);
+					HAL_GPIO_WritePin(L8_GPIO_Port, L8_Pin, arreglo_leds[7]);
+					HAL_Delay(500);
+				}
 
-		 		arreglo_leds=arreglo_leds>>1;
-		 		HAL_GPIO_WritePin(L1_GPIO_Port, L1_Pin, arreglo_leds[0]);
-		 			 HAL_GPIO_WritePin(L2_GPIO_Port, L2_Pin, arreglo_leds[1]);
-		 			 HAL_GPIO_WritePin(L3_GPIO_Port, L3_Pin, arreglo_leds[2]);
-		 			 HAL_GPIO_WritePin(L4_GPIO_Port, L4_Pin, arreglo_leds[3]);
-		 			 HAL_GPIO_WritePin(L5_GPIO_Port, L5_Pin, arreglo_leds[4]);
-		 			 HAL_GPIO_WritePin(L6_GPIO_Port, L6_Pin, arreglo_leds[5]);
-		 			 HAL_GPIO_WritePin(L7_GPIO_Port, L7_Pin, arreglo_leds[6]);
-		 			 HAL_GPIO_WritePin(L8_GPIO_Port, L8_Pin, arreglo_leds[7]);
-		 			 	 }
-		 	if (switches[0]==1 && switches[1]==0){
-		 		arreglo_leds=arreglo_leds<<1;
-		 		HAL_GPIO_WritePin(L1_GPIO_Port, L1_Pin, arreglo_leds[0]);
-		 			 HAL_GPIO_WritePin(L2_GPIO_Port, L2_Pin, arreglo_leds[1]);
-		 			 HAL_GPIO_WritePin(L3_GPIO_Port, L3_Pin, arreglo_leds[2]);
-		 			 HAL_GPIO_WritePin(L4_GPIO_Port, L4_Pin, arreglo_leds[3]);
-		 			 HAL_GPIO_WritePin(L5_GPIO_Port, L5_Pin, arreglo_leds[4]);
-		 			 HAL_GPIO_WritePin(L6_GPIO_Port, L6_Pin, arreglo_leds[5]);
-		 			 HAL_GPIO_WritePin(L7_GPIO_Port, L7_Pin, arreglo_leds[6]);
-		 			 HAL_GPIO_WritePin(L8_GPIO_Port, L8_Pin, arreglo_leds[7]);
-		 			 	 }
-
-
-		 	 }
-		 }
 
 	  };
 
+
+
+  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

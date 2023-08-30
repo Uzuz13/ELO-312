@@ -9,7 +9,8 @@
 //enum estado estado_boton= Veloz; //task 3
 int camino=1;
 enum estado estado_boton=Play; //task 4
-int switches[2]={0,0};
+int switches_1;
+int switches_2;
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 
@@ -68,13 +69,6 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 	  }
 
-	 if(GPIO_Pin == S1_Pin){
-		switches[0]=HAL_GPIO_ReadPin(S1_GPIO_Port, S1_Pin);
-	  }
-	 if(GPIO_Pin == S2_Pin){
-
-		 switches[1]=HAL_GPIO_ReadPin(S2_GPIO_Port, S2_Pin);
-	 }
 }
 
 
